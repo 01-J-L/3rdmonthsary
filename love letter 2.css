@@ -1,0 +1,353 @@
+/* --- RESPONSIVE REFACTOR --- */
+/*
+  - Used CSS variables for sizes, making the component easily scalable.
+  - Used clamp() for fluid typography.
+  - Used flexbox on the body for better centering across devices.
+  - Converted fixed px animation values to relative viewport units (vh, vw).
+  - Added a media query for larger screens.
+*/
+
+:root {
+  /* Define scalable variables. --base-size controls the overall scale. */
+  --base-size: min(90vw, 300px); /* 90% of viewport width, but max 300px */
+  --envelope-width: var(--base-size);
+  --envelope-height: calc(var(--base-size) * 0.65); /* Maintain aspect ratio */
+  --letter-pull-out: calc(var(--envelope-height) * -0.7);
+  --heart-rise: -100vh; /* Fly up the entire height of the screen */
+  --heart-sway: 15vw;
+
+  /* Colors */
+  --color-envelope: #d9534f;
+  --color-pocket-front: #f5a3a2;
+  --color-pocket-back: #ff6f61;
+  --color-heart: #e60073;
+  --color-background: #f0e6f6;
+  --color-letter-lines: #ffe6e6;
+  --color-letter-paper: #fff;
+}
+
+body {
+  background-color: var(--color-background);
+  margin: 0;
+  min-height: 100vh;
+  /* Use Flexbox for robust centering */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.envlope-wrapper {
+  /* This wrapper no longer needs a fixed height */
+  /* It helps to contain the absolutely positioned hearts */
+  margin-top: 200px;
+  position: relative;
+  height: var(--envelope-height);
+}
+
+#envelope {
+  position: relative;
+  width: var(--envelope-width);
+  height: var(--envelope-height);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background-color: var(--color-envelope);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  /* Centering and top positioning are now handled by the body's flexbox */
+}
+
+.front {
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: 3;
+}
+
+.flap {
+  /* Use CSS variables to calculate the triangle shape based on envelope size */
+  border-left: calc(var(--envelope-width) / 2) solid transparent;
+  border-right: calc(var(--envelope-width) / 2) solid transparent;
+  border-bottom: calc(var(--envelope-height) * 0.45) solid transparent;
+  border-top: calc(var(--envelope-height) * 0.55) solid var(--color-envelope);
+  transform-origin: top;
+  pointer-events: none;
+}
+
+.pocket {
+  /* Use CSS variables to calculate the triangle shape based on envelope size */
+  border-left: calc(var(--envelope-width) / 2) solid var(--color-pocket-front);
+  border-right: calc(var(--envelope-width) / 2) solid var(--color-pocket-front);
+  border-bottom: calc(var(--envelope-height) / 2) solid var(--color-pocket-back);
+  border-top: calc(var(--envelope-height) / 2) solid transparent;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.letter {
+  position: relative;
+  background-color: var(--color-letter-paper);
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 90%;
+  top: 5%;
+  border-radius: 6px;
+  box-shadow: 0 2px 26px rgba(0, 0, 0, 0.12);
+  font-family: "Dancing Script", cursive;
+}
+
+.words {
+  position: absolute;
+  left: 10%;
+  width: 80%;
+  height: 14%;
+  background-color: var(--color-letter-lines);
+  text-align: center;
+  /* Vertically center text in the line */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5em;
+  box-sizing: border-box;
+}
+
+/* Use clamp() for fluid font sizes that adapt to viewport width */
+.words.line1 {
+  top: 10%;
+  width: 40%;
+  height: 10%;
+  left: 5%;
+  justify-content: flex-start;
+  font-size: clamp(0.7rem, 2vw, 0.9rem);
+}
+
+.words.line2 {
+  top: 25%;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+}
+
+.words.line3 {
+  top: 45%;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+}
+
+.words.line4 {
+  top: 65%;
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+}
+
+/* --- Animations & Transitions --- */
+
+.open .flap {
+  transform: rotateX(180deg);
+  transition: transform 0.4s ease, z-index 0.6s;
+  z-index: 1;
+}
+
+.close .flap {
+  transform: rotateX(0deg);
+  transition: transform 0.4s 0.6s ease, z-index 1s;
+  z-index: 5;
+}
+
+.close .letter {
+  transform: translateY(0px);
+  transition: transform 0.4s ease, z-index 1s;
+  z-index: 1;
+}
+
+.open .letter {
+  /* Use a variable for the pull-out distance */
+  transform: translateY(var(--letter-pull-out));
+  transition: transform 0.4s 0.6s ease, z-index 0.6s;
+  z-index: 2;
+}
+
+.hearts {
+  position: absolute;
+  /* Position hearts relative to the envelope itself */
+  top: 50%;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.heart {
+  position: absolute;
+  bottom: 0;
+  right: 10%;
+  pointer-events: none;
+}
+
+.heart:before,
+.heart:after {
+  position: absolute;
+  content: "";
+  left: 50px;
+  top: 0;
+  width: 50px;
+  height: 80px;
+  background: var(--color-heart);
+  border-radius: 50px 50px 0 0;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+.heart:after {
+  left: 0;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+.close .heart {
+  opacity: 0;
+  animation: none;
+}
+
+.a1,
+.a2,
+.a3 {
+  opacity: 0; /* Start hidden */
+  animation-fill-mode: forwards;
+  animation-delay: 0.7s;
+}
+
+.open .a1,
+.open .a2,
+.open .a3 {
+  opacity: 1;
+}
+
+.a1 {
+  left: 20%;
+  transform: scale(0.6);
+  animation: slideUp 4s linear 1, sideSway 2s ease-in-out 4 alternate;
+}
+
+.a2 {
+  left: 55%;
+  transform: scale(1);
+  animation: slideUp 5s linear 1, sideSway 4s ease-in-out 2 alternate;
+}
+
+.a3 {
+  left: 10%;
+  transform: scale(0.8);
+  animation: slideUp 7s linear 1, sideSway 2s ease-in-out 6 alternate;
+}
+
+/* Use transform for animation for better performance */
+@keyframes slideUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(var(--heart-rise));
+  }
+}
+
+@keyframes sideSway {
+  0% {
+    margin-left: 0px;
+  }
+  100% {
+    margin-left: var(--heart-sway);
+  }
+}
+
+/* --- Controls --- */
+.reset {
+  text-align: center;
+}
+
+.reset button {
+  font-weight: 800;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: solid 2px var(--color-envelope);
+  border-radius: 4px;
+  color: var(--color-envelope);
+  display: inline-block;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin: 5px;
+  padding: 10px;
+  line-height: 1em;
+  text-decoration: none;
+  min-width: 120px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.reset button:hover {
+  background-color: var(--color-envelope);
+  color: #fff;
+}
+
+/* --- Navigation Cards --- */
+.navigation-section {
+  width: 90%;
+  max-width: 900px; /* Constrain width on large screens */
+  margin: 2rem auto 0; /* Add space above the section */
+}
+
+.nav-heading {
+  font-family: "Dancing Script", cursive;
+  color: var(--color-envelope);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.nav-cards {
+  display: grid;
+  /* Create responsive columns: they'll be at least 140px, and grow to fill space */
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.25rem;
+}
+
+.card-btn {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  text-decoration: none;
+  text-align: center;
+  color: var(--color-pocket-back);
+  /* Using a more readable system font for the cards */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease, color 0.3s ease;
+  border: 1px solid #fff7f7;
+}
+
+.card-btn:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-envelope);
+  color: #fff;
+}
+
+/* --- Media Query for Larger Screens --- */
+@media (min-width: 768px) {
+  :root {
+    /* Increase base size on tablets and desktops */
+    --base-size: 400px;
+    --heart-sway: 75px;
+  }
+
+  .reset button {
+    font-size: 16px;
+    padding: 12px;
+  }
+  .card-btn {
+    font-size: 1.1rem;
+  }
+}

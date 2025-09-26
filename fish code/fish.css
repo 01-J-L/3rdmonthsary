@@ -1,0 +1,163 @@
+:root {
+  /* MODIFIED: Responsive fish size using vmin (viewport minimum dimension) */
+  --coilSize: clamp(10px, 1.5vmin, 18px);
+  --delayCount: 40ms;
+  --scaleMe: 1;
+
+  --scaleFlip: 1;
+  --posFlip: 0;
+}
+
+body {
+  margin: 0;
+  background-color: #87ceeb; /* A nicer lightblue */
+  overflow: hidden;
+}
+
+/* --- NEW: Main scene container --- */
+.scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* --- NEW: Invisible SVG that holds the path --- */
+.path-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Make it unclickable */
+  opacity: 0;
+}
+
+/* --- NEW: Responsive text styling --- */
+.text-container {
+  position: absolute;
+  top: 45%; /* Adjusted for better visual balance */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.text-container p {
+  margin: 0;
+  font-family: 'Pacifico', cursive; /* A more thematic font */
+  /* Fluid font size */
+  font-size: clamp(1.5rem, 6vmin, 4rem);
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+  white-space: nowrap; /* Prevent line breaks on small screens */
+}
+
+/* --- MODIFIED: Fish container positioning --- */
+.fish {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(
+    calc(var(--coilSize) * 4) calc(var(--coilSize) / 3) 5px rgba(0, 0, 0, 0.3)
+  );
+}
+
+.fish .koiCoil {
+  position: absolute;
+  width: var(--coilSize);
+  height: var(--coilSize);
+  background-color: orangered;
+  border-radius: 50%;
+  top: 0; /* Positioned relative to the SVG container */
+  left: 0;
+  transform: scale(var(--scaleMe), var(--scaleMe));
+  filter: contrast(200%);
+  
+  /* MODIFIED: Use the URL of the SVG path */
+  offset-path: url(#koi-path);
+
+  animation: fishAnim 20000ms linear infinite;
+  box-shadow: calc(var(--coilSize) / -2) calc(var(--coilSize) / -10) 0 white inset;
+}
+
+/* --- Unchanged fish styling from here, as it's self-contained --- */
+.fish:nth-of-type(2) {
+  transform: scale(-1, 1);
+  filter: drop-shadow(
+    calc(var(--coilSize) * -4) calc(var(--coilSize) / 3) 5px rgba(0, 0, 0, 0.3)
+  );
+}
+.fish:nth-of-type(2) .koiCoil {
+  background-color: white;
+  box-shadow: calc(var(--coilSize) / -2) calc(var(--coilSize) / -10) 0 orangered inset;
+}
+.fish .koiCoil:nth-of-type(15),
+.fish .koiCoil:nth-of-type(14) {
+  background-color: orangered;
+}
+.fish:nth-of-type(2) .koiCoil:nth-of-type(15),
+.fish:nth-of-type(2) .koiCoil:nth-of-type(14) {
+  background-color: white;
+}
+.fish .koiCoil:nth-of-type(15)::after {
+  content: ":"; position: absolute; color: black; font-weight: 800; text-align: center; line-height: 60%; font-size: calc(var(--coilSize) * 1.2);
+}
+.fish .koiCoil:nth-of-type(1)::before {
+  content: ""; position: absolute; width: 100%; height: 50%; top: 25%; left: -100%; border-radius: var(--coilSize); background-color: white; transform-origin: center right; animation: backFlip 200ms ease-in-out alternate infinite;
+}
+.fish .koiCoil:nth-of-type(14) { --scaleMe: 1.2; animation-delay: calc(var(--delayCount) * 1); }
+.fish .koiCoil:nth-of-type(13) { --scaleMe: 1.35; animation-delay: calc(var(--delayCount) * 2); }
+.fish .koiCoil:nth-of-type(12) { --scaleMe: 1.55; animation-delay: calc(var(--delayCount) * 3); }
+.fish .koiCoil:nth-of-type(11) { --scaleMe: 1.75; animation-delay: calc(var(--delayCount) * 4); }
+.fish .koiCoil:nth-of-type(10) { --scaleMe: 1.9; animation-delay: calc(var(--delayCount) * 5); }
+.fish .koiCoil:nth-of-type(9) { --scaleMe: 2; animation-delay: calc(var(--delayCount) * 6); }
+.fish .koiCoil:nth-of-type(8) { --scaleMe: 2; animation-delay: calc(var(--delayCount) * 7); }
+.fish .koiCoil:nth-of-type(7) { --scaleMe: 2; animation-delay: calc(var(--delayCount) * 8); }
+.fish .koiCoil:nth-of-type(6) { --scaleMe: 1.9; animation-delay: calc(var(--delayCount) * 9); }
+.fish .koiCoil:nth-of-type(5) { --scaleMe: 1.75; animation-delay: calc(var(--delayCount) * 10); }
+.fish .koiCoil:nth-of-type(4) { --scaleMe: 1.55; animation-delay: calc(var(--delayCount) * 11); }
+.fish .koiCoil:nth-of-type(3) { --scaleMe: 1.35; animation-delay: calc(var(--delayCount) * 12); }
+.fish .koiCoil:nth-of-type(2) { --scaleMe: 1.2; animation-delay: calc(var(--delayCount) * 13); }
+.fish .koiCoil:nth-of-type(1) { animation-delay: calc(var(--delayCount) * 14); }
+.fish .koiCoil:nth-of-type(12)::before,
+.fish .koiCoil:nth-of-type(12)::after {
+  content: ""; position: absolute; width: 100%; height: 20%; top: -10%; left: -100%; border-radius: var(--coilSize); background-color: white; transform-origin: center right; animation: sideFlip 500ms ease-in-out alternate infinite;
+}
+.fish .koiCoil:nth-of-type(12)::after { --scaleFlip: -1; --posFlip: calc(var(--coilSize) * -1); }
+
+@keyframes fishAnim { 0% { offset-distance: 0%; } 100% { offset-distance: 100%; } }
+@keyframes backFlip { 0% { transform: rotate(45deg); } 100% { transform: rotate(-45deg); } }
+@keyframes sideFlip { 0% { transform: scale(1, var(--scaleFlip)) translateY(var(--posFlip)) rotate(80deg); } 100% { transform: scale(1, var(--scaleFlip)) translateY(var(--posFlip)) rotate(20deg); } }
+
+/* --- NEW: Home Button Styling --- */
+.home-button {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 20;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease-in-out;
+}
+.home-button svg {
+  width: 28px;
+  height: 28px;
+  fill: rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease-in-out;
+}
+.home-button:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+  cursor: pointer;
+}
+.home-button:hover svg {
+  fill: #000;
+}

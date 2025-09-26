@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="light reveal txt.css" />
+    <title>Customizable Light Reveal</title>
+  </head>
+  <body>
+    <!-- Star background -->
+    <div>
+      <div class="starsec"></div>
+      <div class="starthird"></div>
+      <div class="starfourth"></div>
+      <div class="starfifth"></div>
+    </div>
+
+    <!-- Lamp Animation -->
+    <div class="lamp__wrap">
+      <div class="lamp">
+        <div class="cable"></div>
+        <div class="cover"></div>
+        <div class="in-cover">
+          <div class="bulb"></div>
+        </div>
+        <div class="light"></div>
+      </div>
+    </div>
+
+    <!-- Main Text Content -->
+    <main class="error">
+      <div class="error__content">
+        <div class="error__message message">
+          <h1 class="message__title">I Love You💕</h1>
+          <p class="message__text">Your the prettiest girl i ever seen</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- NEW: Interactive Controls -->
+    <div class="controls-container">
+      <div class="control">
+        <label for="speed-slider">Swing Speed</label>
+        <input
+          type="range"
+          id="speed-slider"
+          min="1"
+          max="15"
+          step="0.1"
+          value="6"
+        />
+      </div>
+      <div class="control">
+        <label for="color-picker">Light Color</label>
+        <input type="color" id="color-picker" value="#00FFFF" />
+      </div>
+    </div>
+
+    <!-- Home Button -->
+    <a href="../index.html" class="home-button" aria-label="Home">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+        <path
+          d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"
+        />
+      </svg>
+    </a>
+
+    <!-- Audio player element -->
+    <audio id="background-music" loop preload="auto">
+      <!-- You can replace this src with your own local music file -->
+      <source
+        src="light.mp3"
+        type="audio/mpeg"
+      />
+      Your browser does not support the audio element.
+    </audio>
+
+    <!-- NEW: Link to the controls JavaScript -->
+    <script src="light_controls.js"></script>
+  </body>
+</html>

@@ -1,0 +1,155 @@
+@charset "UTF-8";
+
+/* --- 1. GENERAL RESET & SETUP --- */
+:root {
+  /* NEW: CSS variables for JS control */
+  --swing-duration: 6s;
+  --lamp-color: #0bd5e8;
+  --lamp-glow-color: #08ffff;
+  --light-cone-r: 44;
+  --light-cone-g: 255;
+  --light-cone-b: 255;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-text-size-adjust: none;
+  border: 0;
+  outline: 0;
+  vertical-align: baseline;
+  background: transparent;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: #181828;
+  font-family: "Montserrat", sans-serif;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* --- 2. BACKGROUND STARS (Unchanged) --- */
+.starsec, .starthird, .starfourth, .starfifth {
+  content: " "; position: absolute; background: transparent; width: 3px; height: 3px;
+}
+.starsec { box-shadow: 571px 173px #00bcd4, 1732px 143px #00bcd4, 1745px 454px #ff5722, 234px 784px #00bcd4, 1793px 1123px #ff9800, 1076px 504px #03a9f4, 633px 601px #ff5722, 350px 630px #ffeb3b, 1164px 782px #00bcd4, 76px 690px #3f51b5, 1825px 701px #cddc39, 1646px 578px #ffeb3b, 544px 293px #2196f3, 445px 1061px #673ab7, 928px 47px #00bcd4; animation: animStar 150s linear infinite; }
+.starthird { box-shadow: 571px 173px #00bcd4, 1732px 143px #00bcd4, 1745px 454px #ff5722, 234px 784px #00bcd4, 1793px 1123px #ff9800, 1076px 504px #03a9f4, 633px 601px #ff5722, 350px 630px #ffeb3b, 1164px 782px #00bcd4, 76px 690px #3f51b5, 1825px 701px #cddc39, 1646px 578px #ffeb3b, 544px 293px #2196f3, 445px 1061px #673ab7, 928px 47px #00bcd4; animation: animStar 100s linear infinite; }
+.starfourth { width: 2px; height: 2px; box-shadow: 857px 281px #f44336, 1254px 1306px #cddc39, 987px 990px #4caf50, 1655px 911px #00bcd4, 1102px 1216px #ff5722, 1807px 1044px #fff, 660px 435px #03a9f4, 299px 678px #4caf50, 1193px 115px #ff9800, 918px 290px #cddc39, 1447px 1422px #ffeb3b, 91px 1273px #9c27b0; animation: animStar 50s linear infinite; }
+.starfifth { width: 1px; height: 1px; box-shadow: 108px 223px #ffeb3b, 146px 754px #00bcd4, 461px 1446px #ff5722, 1004px 391px #673ab7, 1529px 516px #f44336, 1206px 845px #cddc39, 347px 583px #009688, 1102px 1332px #f44336, 709px 1756px #00bcd4, 1972px 248px #fff, 1669px 1344px #ff5722; animation: animStar 80s linear infinite; }
+@keyframes animStar { from { transform: translateY(0px); } to { transform: translateY(-2000px); } }
+
+/* --- 3. SWINGING LAMP (MODIFIED) --- */
+.lamp__wrap {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 300px;
+}
+.lamp {
+  display: flex; flex-direction: column; align-items: center; transform-origin: center top;
+  /* MODIFIED: Use the --swing-duration variable */
+  animation: move var(--swing-duration) cubic-bezier(0.6, 0, 0.38, 1) infinite;
+}
+@keyframes move { 0% { transform: rotate(40deg); } 50% { transform: rotate(-40deg); } 100% { transform: rotate(40deg); } }
+.cable { width: 8px; height: 248px; background-image: linear-gradient(rgb(32 148 218 / 70%), rgb(193 65 25)), linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)); }
+.cover {
+  width: 200px; height: 80px;
+  /* MODIFIED: Use the --lamp-color variable */
+  background: var(--lamp-color);
+  border-top-left-radius: 50%; border-top-right-radius: 50%; position: relative; z-index: 2;
+}
+.in-cover {
+  width: 100%; height: 20px; border-radius: 100%;
+  /* MODIFIED: Use the --lamp-glow-color variable */
+  background: var(--lamp-glow-color);
+  position: absolute; left: 0; right: 0; margin: 0 auto; bottom: -9px; z-index: 1;
+}
+.in-cover .bulb {
+  width: 50px; height: 50px; border-radius: 50%;
+  /* MODIFIED: Use the --lamp-glow-color variable */
+  background-color: var(--lamp-glow-color);
+  position: absolute; left: 0; right: 0; bottom: -20px; margin: 0 auto;
+  /* MODIFIED: Use RGB variables for the dynamic glow */
+  box-shadow: 0 0 25px 7px rgba(var(--light-cone-r), var(--light-cone-g), var(--light-cone-b), 0.8),
+    0 0 64px 47px rgba(var(--light-cone-r), var(--light-cone-g), var(--light-cone-b), 0.5),
+    0 0 30px 15px rgba(var(--light-cone-r), var(--light-cone-g), var(--light-cone-b), 0.2);
+}
+.light {
+  width: 200px; height: 0px;
+  /* MODIFIED: Use RGB variables for the dynamic light cone */
+  border-bottom: 900px solid rgba(var(--light-cone-r), var(--light-cone-g), var(--light-cone-b), 0.18);
+  border-left: 50px solid transparent; border-right: 50px solid transparent; position: absolute; top: 270px; margin: 0 auto; z-index: 1; border-radius: 90px 90px 0 0;
+}
+
+/* --- 4. MAIN CONTENT & TEXT (Unchanged) --- */
+.error { position: relative; z-index: 2; padding: 20px; margin-top: 150px; }
+.error__content { max-width: 960px; margin: 0 auto; color: #181828; }
+.message__title { font-weight: 900; text-transform: uppercase; letter-spacing: 5px; font-size: clamp(2rem, 10vw, 5.6rem); padding-bottom: 20px; }
+.message__text { line-height: 1.6; font-size: clamp(1rem, 2.5vw, 1.25rem); max-width: 680px; margin: auto; }
+
+/* --- 5. RESPONSIVENESS (Unchanged) --- */
+@media (max-width: 900px) { .lamp__wrap { transform: translateX(-50%) scale(0.6); } .error { margin-top: 100px; } }
+@media (max-width: 600px) { .lamp__wrap { transform: translateX(-50%) scale(0.5); } .error { margin-top: 50px; } }
+
+/* --- NEW: Control Panel Styling --- */
+.controls-container {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.control label {
+  font-size: 14px;
+  color: #fff;
+  white-space: nowrap;
+}
+.control input[type="range"] {
+  width: 120px;
+  cursor: pointer;
+}
+.control input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 35px;
+  height: 35px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.control input[type="color"]::-webkit-color-swatch {
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+.control input[type="color"]::-moz-color-swatch {
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+/* --- Home Button Styling (Themed) --- */
+.home-button {
+  position: fixed; bottom: 25px; right: 25px; z-index: 10; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; background-color: rgba(var(--light-cone-r), var(--light-cone-g), var(--light-cone-b), 0.15); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); transition: all 0.3s ease-in-out;
+}
+.home-button svg { width: 28px; height: 28px; fill: rgba(255, 255, 255, 0.7); transition: all 0.3s ease-in-out; }
+.home-button:hover { background-color: rgba(var(--light-cone-r), var(--light-cone-g), var(--light-cone-b), 0.5); border-color: rgba(255, 255, 255, 0.8); transform: scale(1.1); cursor: pointer; }
+.home-button:hover svg { fill: #ffffff; filter: drop-shadow(0 0 8px var(--lamp-glow-color)); }
