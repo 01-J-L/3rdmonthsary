@@ -1,0 +1,98 @@
+body {
+  margin: 0px;
+  overflow: hidden;
+  background-color: #006400; /* Fallback background */
+}
+
+/* --- Responsive text container --- */
+.text-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Modern centering */
+  z-index: 5; /* Ensure it's above the canvas */
+  
+  /* Responsive width */
+  width: 90%;
+  max-width: 800px;
+  
+  /* Styling */
+  background: rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- Responsive text styling --- */
+.text-container p {
+  color: #FFFFFF;
+  font-family: 'Poppins', sans-serif; /* Using the new font */
+  
+  /* Fluid font size: scales between 1rem and 2rem based on viewport width */
+  font-size: clamp(1rem, 4vw, 2rem);
+  
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Style the dat.GUI controls to be less obtrusive --- */
+.dg.main {
+  transform: scale(0.8);
+  transform-origin: top left;
+  z-index: 10 !important; /* Make sure controls are on top */
+}
+
+
+/* --- NEW: Home Button Styling --- */
+.home-button {
+  position: fixed; /* Stays in the corner */
+  bottom: 25px;
+  right: 25px;
+  z-index: 10; /* Ensures it's on top of everything */
+  
+  /* Sizing and Shape */
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  
+  /* Centering the icon inside */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Styling to match the text box */
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  /* Smooth transitions for hover effects */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Styling for the SVG icon inside the button */
+.home-button svg {
+  width: 28px;
+  height: 28px;
+  fill: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effects to make the button interactive */
+.home-button:hover {
+  background-color: rgba(0, 230, 0, 0.3); /* Themed green glow */
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.home-button:hover svg {
+  fill: #ffffff;
+  /* Add a glow to the icon that matches the background */
+  filter: drop-shadow(0 0 8px rgb(0, 230, 0));
+}
